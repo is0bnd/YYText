@@ -1,12 +1,8 @@
 //
 //  YYText.h
-//  YYText <https://github.com/ibireme/YYText>
+//  YYText
 //
-//  Created by ibireme on 15/2/25.
-//  Copyright (c) 2015 ibireme.
-//
-//  This source code is licensed under the MIT-style license found in the
-//  LICENSE file in the root directory of this source tree.
+//  Created by Shuai on 2024/1/21.
 //
 
 #import <UIKit/UIKit.h>
@@ -30,6 +26,7 @@ FOUNDATION_EXPORT const unsigned char YYTextVersionString[];
 #import <YYText/NSAttributedString+YYText.h>
 #import <YYText/NSParagraphStyle+YYText.h>
 #import <YYText/UIPasteboard+YYText.h>
+#import <YYText/YYTextLazyViewAttachment.h>
 #else
 #import "YYLabel.h"
 #import "YYTextView.h"
@@ -47,4 +44,5 @@ FOUNDATION_EXPORT const unsigned char YYTextVersionString[];
 #import "NSAttributedString+YYText.h"
 #import "NSParagraphStyle+YYText.h"
 #import "UIPasteboard+YYText.h"
+#import "YYTextLazyViewAttachment.h"
 #endif

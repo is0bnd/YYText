@@ -31,7 +31,7 @@ static void YYRunLoopObserverCallBack(CFRunLoopObserverRef observer, CFRunLoopAc
     }];
 }
 
-static void YYTextTransactionSetup() {
+static void YYTextTransactionSetup(void) {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         transactionSet = [NSMutableSet new];

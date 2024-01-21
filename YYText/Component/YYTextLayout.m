@@ -13,6 +13,7 @@
 #import "YYTextUtilities.h"
 #import "YYTextAttribute.h"
 #import "YYTextArchiver.h"
+#import "YYTextLazyViewAttachment.h"
 #import "NSAttributedString+YYText.h"
 
 const CGSize YYTextContainerMaxSize = (CGSize){0x100000, 0x100000};
@@ -941,7 +942,8 @@ fail:
 
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
-    NSData *textData = [YYTextArchiver archivedDataWithRootObject:_text];
+    NSError *error;
+    NSData *textData = [YYTextArchiver archivedDataWithRootObject:self requiringSecureCoding:false error:&error];
     [aCoder encodeObject:textData forKey:@"text"];
     [aCoder encodeObject:_container forKey:@"container"];
     [aCoder encodeObject:[NSValue valueWithRange:_range] forKey:@"range"];
@@ -949,7 +951,8 @@ fail:
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
     NSData *textData = [aDecoder decodeObjectForKey:@"text"];
-    NSAttributedString *text = [YYTextUnarchiver unarchiveObjectWithData:textData];
+    NSError *error;
+    NSAttributedString *text = [YYTextUnarchiver unarchivedObjectOfClass:[NSAttributedString class] fromData:textData error:&error];
     YYTextContainer *container = [aDecoder decodeObjectForKey:@"container"];
     NSRange range = ((NSValue *)[aDecoder decodeObjectForKey:@"range"]).rangeValue;
     self = [self.class layoutWithContainer:container text:text range:range];
@@ -2045,7 +2048,7 @@ fail:
             } else {
                 topRect.rect = CGRectMake(_container.path ? startLine.left : _container.insets.left, startLine.top, topOffset - startLine.left, startLine.height);
             }
-            topRect.writingDirection = UITextWritingDirectionRightToLeft;
+            topRect.writingDirection = NSWritingDirectionRightToLeft;
         } else {
             if (isVertical) {
                 topRect.rect = CGRectMake(startLine.left, topOffset, startLine.width, (_container.path ? startLine.bottom : _container.size.height - _container.insets.bottom) - topOffset);
@@ -2066,7 +2069,7 @@ fail:
             } else {
                 bottomRect.rect = CGRectMake(bottomOffset, endLine.top, (_container.path ? endLine.right : _container.size.width - _container.insets.right) - bottomOffset, endLine.height);
             }
-            bottomRect.writingDirection = UITextWritingDirectionRightToLeft;
+            bottomRect.writingDirection = NSWritingDirectionRightToLeft;
         } else {
             if (isVertical) {
                 CGFloat top = _container.path ? endLine.top : _container.insets.top;
@@ -2973,6 +2976,8 @@ static void YYTextDrawAttachment(YYTextLayout *layout, CGContextRef context, CGS
             image = a.content;
         } else if ([a.content isKindOfClass:[UIView class]]) {
             view = a.content;
+        } else if ([a.content conformsToProtocol:@protocol(YYTextLazyViewAttachment)]) {
+            view = [a.content view];
         } else if ([a.content isKindOfClass:[CALayer class]]) {
             layer = a.content;
         }
@@ -3400,6 +3405,9 @@ static void YYTextDrawDebug(YYTextLayout *layout, CGContextRef context, CGSize s
         } else if ([a.content isKindOfClass:[CALayer class]]) {
             CALayer *l = a.content;
             [l removeFromSuperlayer];
+        } else if ([a.content conformsToProtocol:@protocol(YYTextLazyViewAttachment)]) {
+            UIView *v = [a.content view];
+            [v removeFromSuperview];
         }
     }
 }

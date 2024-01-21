@@ -14,10 +14,11 @@
 #import "YYTextWeakProxy.h"
 #import "YYTextUtilities.h"
 #import "NSAttributedString+YYText.h"
+#import "YYTextLazyViewAttachment.h"
 #import <libkern/OSAtomic.h>
 
 
-static dispatch_queue_t YYLabelGetReleaseQueue() {
+static dispatch_queue_t YYLabelGetReleaseQueue(void) {
     return dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0);
 }
 
@@ -33,8 +34,9 @@ static dispatch_queue_t YYLabelGetReleaseQueue() {
     YYTextLayout *_innerLayout;
     YYTextContainer *_innerContainer; ///< nonnull
     
-    NSMutableArray *_attachmentViews;
-    NSMutableArray *_attachmentLayers;
+    NSMutableArray<UIView *> *_attachmentViews;
+    NSMutableArray<CALayer *> *_attachmentLayers;
+    NSMutableArray<id<YYTextLazyViewAttachment>> *_attachmentContents;
     
     NSRange _highlightRange; ///< current highlight range
     YYTextHighlight *_highlight; ///< highlight attribute in `_highlightRange`
@@ -382,6 +384,7 @@ static dispatch_queue_t YYLabelGetReleaseQueue() {
     
     _attachmentViews = [NSMutableArray new];
     _attachmentLayers = [NSMutableArray new];
+    _attachmentContents = [NSMutableArray new];
     
     _debugOption = [YYTextDebugOption sharedDebugOption];
     [YYTextDebugOption addDebugTarget:self];
@@ -1066,6 +1069,7 @@ static dispatch_queue_t YYLabelGetReleaseQueue() {
     YYTextDebugOption *debug = _debugOption;
     NSMutableArray *attachmentViews = _attachmentViews;
     NSMutableArray *attachmentLayers = _attachmentLayers;
+    NSMutableArray *attachmentContents = _attachmentContents;
     BOOL layoutNeedUpdate = _state.layoutNeedUpdate;
     BOOL fadeForAsync = _displaysAsynchronously && _fadeOnAsynchronouslyDisplay;
     __block YYTextLayout *layout = (_state.showingHighlight && _highlightLayout) ? self._highlightLayout : self._innerLayout;
@@ -1098,8 +1102,17 @@ static dispatch_queue_t YYLabelGetReleaseQueue() {
                 }
             }
         }
+        for (id<YYTextLazyViewAttachment> content in attachmentContents) {
+            UIView *view = [content view];
+            if (layoutNeedUpdate || ![layout.attachmentContentsSet containsObject:view]) {
+                if (view.superview == self) {
+                    [view removeFromSuperview];
+                }
+            }
+        }
         [attachmentViews removeAllObjects];
         [attachmentLayers removeAllObjects];
+        [attachmentContents removeAllObjects];
     };
 
     task.display = ^(CGContextRef context, CGSize size, BOOL (^isCancelled)(void)) {
@@ -1183,8 +1196,13 @@ static dispatch_queue_t YYLabelGetReleaseQueue() {
         point = YYTextCGPointPixelRound(point);
         [drawLayout drawInContext:nil size:size point:point view:view layer:layer debug:nil cancel:NULL];
         for (YYTextAttachment *a in drawLayout.attachments) {
-            if ([a.content isKindOfClass:[UIView class]]) [attachmentViews addObject:a.content];
-            else if ([a.content isKindOfClass:[CALayer class]]) [attachmentLayers addObject:a.content];
+            if ([a.content isKindOfClass:[UIView class]]) {
+                [attachmentViews addObject:a.content];
+            }else if ([a.content isKindOfClass:[CALayer class]]) {
+                [attachmentLayers addObject:a.content];
+            }else if ([a.content conformsToProtocol:@protocol(YYTextLazyViewAttachment)]) {
+                [attachmentContents addObject:a.content];
+            }
         }
         
         if (contentsNeedFade) {

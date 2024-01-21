@@ -10,11 +10,13 @@
 //
 
 #import "YYTextContainerView.h"
+#import "YYTextLazyViewAttachment.h"
 
 @implementation YYTextContainerView {
     BOOL _attachmentChanged;
-    NSMutableArray *_attachmentViews;
-    NSMutableArray *_attachmentLayers;
+    NSMutableArray<UIView *> *_attachmentViews;
+    NSMutableArray<CALayer *> *_attachmentLayers;
+    NSMutableArray<id<YYTextLazyViewAttachment>> *_attachmentContents;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {
@@ -23,6 +25,7 @@
     self.backgroundColor = [UIColor clearColor];
     _attachmentViews = [NSMutableArray array];
     _attachmentLayers = [NSMutableArray array];
+    _attachmentContents = [NSMutableArray array];
     return self;
 }
 
@@ -79,8 +82,13 @@
         for (CALayer *layer in _attachmentLayers) {
             if (layer.superlayer == self.layer) [layer removeFromSuperlayer];
         }
+        for (id<YYTextLazyViewAttachment> content in _attachmentContents) {
+            UIView *view = [content view];
+            if (view.superview == self) [view removeFromSuperview];
+        }
         [_attachmentViews removeAllObjects];
         [_attachmentLayers removeAllObjects];
+        [_attachmentContents removeAllObjects];
     }
     
     // draw layout
@@ -107,6 +115,7 @@
         for (YYTextAttachment *a in _layout.attachments) {
             if ([a.content isKindOfClass:[UIView class]]) [_attachmentViews addObject:a.content];
             if ([a.content isKindOfClass:[CALayer class]]) [_attachmentLayers addObject:a.content];
+            if ([a.content conformsToProtocol:@protocol(YYTextLazyViewAttachment)]) [_attachmentContents addObject:a.content];
         }
     }
 }

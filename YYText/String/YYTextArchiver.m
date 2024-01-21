@@ -19,7 +19,7 @@
  
  Here's a workaround for this issue.
  */
-static CFTypeID CTRunDelegateTypeID() {
+static CFTypeID CTRunDelegateTypeID(void) {
     static CFTypeID typeID;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -36,7 +36,7 @@ static CFTypeID CTRunDelegateTypeID() {
     return typeID;
 }
 
-static CFTypeID CTRubyAnnotationTypeID() {
+static CFTypeID CTRubyAnnotationTypeID(void) {
     static CFTypeID typeID;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -149,29 +149,15 @@ static CFTypeID CTRubyAnnotationTypeID() {
 
 @implementation YYTextArchiver
 
-+ (NSData *)archivedDataWithRootObject:(id)rootObject {
-    if (!rootObject) return nil;
-    NSMutableData *data = [NSMutableData data];
-    YYTextArchiver *archiver = [[[self class] alloc] initForWritingWithMutableData:data];
-    [archiver encodeRootObject:rootObject];
-    [archiver finishEncoding];
-    return data;
++ (NSData *)archivedDataWithRootObject:(id)object requiringSecureCoding:(BOOL)requiresSecureCoding error:(NSError *__autoreleasing  _Nullable *)error {
+    if (!object) return nil;
+    YYTextArchiver *archiver = [[YYTextArchiver alloc] initRequiringSecureCoding:requiresSecureCoding];
+    [archiver encodeRootObject:object];
+    return [archiver encodedData];
 }
 
-+ (BOOL)archiveRootObject:(id)rootObject toFile:(NSString *)path {
-    NSData *data = [self archivedDataWithRootObject:rootObject];
-    if (!data) return NO;
-    return [data writeToFile:path atomically:YES];
-}
-
-- (instancetype)init {
-    self = [super init];
-    self.delegate = self;
-    return self;
-}
-
-- (instancetype)initForWritingWithMutableData:(NSMutableData *)data {
-    self = [super initForWritingWithMutableData:data];
+- (instancetype)initRequiringSecureCoding:(BOOL)requiresSecureCoding {
+    self = [super initRequiringSecureCoding: requiresSecureCoding];
     self.delegate = self;
     return self;
 }
@@ -199,25 +185,15 @@ static CFTypeID CTRubyAnnotationTypeID() {
 
 @implementation YYTextUnarchiver
 
-+ (id)unarchiveObjectWithData:(NSData *)data {
++ (nullable id)unarchivedObjectOfClass:(Class)cls fromData:(NSData *)data error:(NSError **)error {
     if (data.length == 0) return nil;
-    YYTextUnarchiver *unarchiver = [[self alloc] initForReadingWithData:data];
+    YYTextUnarchiver *unarchiver = [[self alloc] initForReadingFromData:data error:error];
+    unarchiver.requiresSecureCoding = NO;
     return [unarchiver decodeObject];
 }
 
-+ (id)unarchiveObjectWithFile:(NSString *)path {
-    NSData *data = [NSData dataWithContentsOfFile:path];
-    return [self unarchiveObjectWithData:data];
-}
-
-- (instancetype)init {
-    self = [super init];
-    self.delegate = self;
-    return self;
-}
-
-- (instancetype)initForReadingWithData:(NSData *)data {
-    self = [super initForReadingWithData:data];
+- (instancetype)initForReadingFromData:(NSData *)data error:(NSError *__autoreleasing  _Nullable *)error {
+    self = [super initForReadingFromData:data error:error];
     self.delegate = self;
     return self;
 }

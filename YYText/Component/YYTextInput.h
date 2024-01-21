@@ -77,7 +77,7 @@ typedef NS_ENUM(NSInteger, YYTextAffinity) {
 @interface YYTextSelectionRect : UITextSelectionRect <NSCopying>
 
 @property (nonatomic, readwrite) CGRect rect;
-@property (nonatomic, readwrite) UITextWritingDirection writingDirection;
+@property (nonatomic, readwrite) NSWritingDirection writingDirection;
 @property (nonatomic, readwrite) BOOL containsStart;
 @property (nonatomic, readwrite) BOOL containsEnd;
 @property (nonatomic, readwrite) BOOL isVertical;

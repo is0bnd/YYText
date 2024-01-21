@@ -16,7 +16,7 @@
 #import "YYTextArchiver.h"
 
 
-static double _YYDeviceSystemVersion() {
+static double _YYDeviceSystemVersion(void) {
     static double version;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -26,18 +26,18 @@ static double _YYDeviceSystemVersion() {
 }
 
 
-NSString *const YYTextBackedStringAttributeName = @"YYTextBackedString";
-NSString *const YYTextBindingAttributeName = @"YYTextBinding";
-NSString *const YYTextShadowAttributeName = @"YYTextShadow";
-NSString *const YYTextInnerShadowAttributeName = @"YYTextInnerShadow";
-NSString *const YYTextUnderlineAttributeName = @"YYTextUnderline";
-NSString *const YYTextStrikethroughAttributeName = @"YYTextStrikethrough";
-NSString *const YYTextBorderAttributeName = @"YYTextBorder";
-NSString *const YYTextBackgroundBorderAttributeName = @"YYTextBackgroundBorder";
-NSString *const YYTextBlockBorderAttributeName = @"YYTextBlockBorder";
-NSString *const YYTextAttachmentAttributeName = @"YYTextAttachment";
-NSString *const YYTextHighlightAttributeName = @"YYTextHighlight";
-NSString *const YYTextGlyphTransformAttributeName = @"YYTextGlyphTransform";
+NSAttributedStringKey const YYTextBackedStringAttributeName = @"YYTextBackedString";
+NSAttributedStringKey const YYTextBindingAttributeName = @"YYTextBinding";
+NSAttributedStringKey const YYTextShadowAttributeName = @"YYTextShadow";
+NSAttributedStringKey const YYTextInnerShadowAttributeName = @"YYTextInnerShadow";
+NSAttributedStringKey const YYTextUnderlineAttributeName = @"YYTextUnderline";
+NSAttributedStringKey const YYTextStrikethroughAttributeName = @"YYTextStrikethrough";
+NSAttributedStringKey const YYTextBorderAttributeName = @"YYTextBorder";
+NSAttributedStringKey const YYTextBackgroundBorderAttributeName = @"YYTextBackgroundBorder";
+NSAttributedStringKey const YYTextBlockBorderAttributeName = @"YYTextBlockBorder";
+NSAttributedStringKey const YYTextAttachmentAttributeName = @"YYTextAttachment";
+NSAttributedStringKey const YYTextHighlightAttributeName = @"YYTextHighlight";
+NSAttributedStringKey const YYTextGlyphTransformAttributeName = @"YYTextGlyphTransform";
 
 NSString *const YYTextAttachmentToken = @"\uFFFC";
 NSString *const YYTextTruncationToken = @"\u2026";
@@ -75,7 +75,7 @@ YYTextAttributeType YYTextAttributeGetType(NSString *name){
         dic[(id)kCTSuperscriptAttributeName] = UIKit; //it's a CoreText attrubite, but only supported by UIKit...
         dic[NSVerticalGlyphFormAttributeName] = All;
         dic[(id)kCTGlyphInfoAttributeName] = CoreText_YYText;
-        dic[(id)kCTCharacterShapeAttributeName] = CoreText_YYText;
+        //dic[(id)kCTCharacterShapeAttributeName] = CoreText_YYText;
         dic[(id)kCTRunDelegateAttributeName] = CoreText_YYText;
         dic[(id)kCTBaselineClassAttributeName] = CoreText_YYText;
         dic[(id)kCTBaselineInfoAttributeName] = CoreText_YYText;
@@ -407,24 +407,16 @@ YYTextAttributeType YYTextAttributeGetType(NSString *name){
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
     NSData *data = nil;
-    @try {
-        data = [YYTextArchiver archivedDataWithRootObject:self.attributes];
-    }
-    @catch (NSException *exception) {
-        NSLog(@"%@",exception);
-    }
+    NSError *error;
+    data = [YYTextArchiver archivedDataWithRootObject:self.attributes requiringSecureCoding:false error:&error];
     [aCoder encodeObject:data forKey:@"attributes"];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
     self = [super init];
     NSData *data = [aDecoder decodeObjectForKey:@"attributes"];
-    @try {
-        _attributes = [YYTextUnarchiver unarchiveObjectWithData:data];
-    }
-    @catch (NSException *exception) {
-        NSLog(@"%@",exception);
-    }
+    NSError *error;
+    _attributes = [YYTextUnarchiver unarchivedObjectOfClass:[NSDictionary class] fromData:data error:&error];
     return self;
 }
 

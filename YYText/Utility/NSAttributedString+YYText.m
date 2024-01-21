@@ -22,7 +22,7 @@
 @implementation NSAttributedString_YYText @end
 
 
-static double _YYDeviceSystemVersion() {
+static double _YYDeviceSystemVersion(void) {
     static double version;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -57,23 +57,15 @@ static double _YYDeviceSystemVersion() {
 
 - (NSData *)yy_archiveToData {
     NSData *data = nil;
-    @try {
-        data = [YYTextArchiver archivedDataWithRootObject:self];
-    }
-    @catch (NSException *exception) {
-        NSLog(@"%@",exception);
-    }
+    NSError *error;
+    data = [YYTextArchiver archivedDataWithRootObject:self requiringSecureCoding:false error:&error];
     return data;
 }
 
 + (instancetype)yy_unarchiveFromData:(NSData *)data {
     NSAttributedString *one = nil;
-    @try {
-        one = [YYTextUnarchiver unarchiveObjectWithData:data];
-    }
-    @catch (NSException *exception) {
-        NSLog(@"%@",exception);
-    }
+    NSError *error;
+    one = [YYTextUnarchiver unarchivedObjectOfClass:[NSAttributedString class] fromData:data error:&error];
     return one;
 }
 
@@ -704,7 +696,7 @@ return style. _attr_;
     dispatch_once(&onceToken, ^{
         failSet = [NSMutableSet new];
         [failSet addObject:(id)kCTGlyphInfoAttributeName];
-        [failSet addObject:(id)kCTCharacterShapeAttributeName];
+        //[failSet addObject:(id)kCTCharacterShapeAttributeName];
         if (kiOS7Later) {
             [failSet addObject:(id)kCTLanguageAttributeName];
         }
@@ -1186,9 +1178,9 @@ return style. _attr_;
     [self yy_setAttribute:(id)kCTGlyphInfoAttributeName value:(__bridge id)glyphInfo range:range];
 }
 
-- (void)yy_setCharacterShape:(NSNumber *)characterShape range:(NSRange)range {
-    [self yy_setAttribute:(id)kCTCharacterShapeAttributeName value:characterShape range:range];
-}
+//- (void)yy_setCharacterShape:(NSNumber *)characterShape range:(NSRange)range {
+//    [self yy_setAttribute:(id)kCTCharacterShapeAttributeName value:characterShape range:range];
+//}
 
 - (void)yy_setRunDelegate:(CTRunDelegateRef)runDelegate range:(NSRange)range {
     [self yy_setAttribute:(id)kCTRunDelegateAttributeName value:(__bridge id)runDelegate range:range];

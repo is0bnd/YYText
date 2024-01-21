@@ -179,7 +179,7 @@ static int _YYTextKeyboardViewFrameObserverKey;
     for (window in app.windows) {
         if ([self _getKeyboardViewFromWindow:window]) return window;
     }
-    window = app.keyWindow;
+    window = app.yy_keyWindow;
     if ([self _getKeyboardViewFromWindow:window]) return window;
     
     NSMutableArray *kbWindows = nil;
@@ -220,7 +220,7 @@ static int _YYTextKeyboardViewFrameObserverKey;
         view = [self _getKeyboardViewFromWindow:window];
         if (view) return view;
     }
-    window = app.keyWindow;
+    window = app.yy_keyWindow;
     view = [self _getKeyboardViewFromWindow:window];
     if (view) return view;
     return nil;
@@ -406,7 +406,7 @@ static int _YYTextKeyboardViewFrameObserverKey;
     UIView *keyboard = self.keyboardView;
     UIWindow *window = keyboard.window;
     if (!window) {
-        window = app.keyWindow;
+        window = app.yy_keyWindow;
     }
     if (!window) {
         window = app.windows.firstObject;
@@ -433,7 +433,7 @@ static int _YYTextKeyboardViewFrameObserverKey;
         
         // Fix iPad(iOS7) keyboard frame error after rorate device when the keyboard is not docked to bottom.
         if (((int)[self _systemVersion]) == 7) {
-            UIInterfaceOrientation ori = app.statusBarOrientation;
+            UIInterfaceOrientation ori = app.yy_statusBarOrientation;
             if (_fromOrientation != UIInterfaceOrientationUnknown && _fromOrientation != ori) {
                 switch (ori) {
                     case UIInterfaceOrientationPortrait: {
@@ -483,7 +483,7 @@ static int _YYTextKeyboardViewFrameObserverKey;
     _hasObservedChange = NO;
     _fromFrame = trans.toFrame;
     _fromVisible = trans.toVisible;
-    _fromOrientation = app.statusBarOrientation;
+    _fromOrientation = app.yy_statusBarOrientation;
 }
 
 - (CGRect)convertRect:(CGRect)rect toView:(UIView *)view {
@@ -493,7 +493,7 @@ static int _YYTextKeyboardViewFrameObserverKey;
     if (CGRectIsNull(rect)) return rect;
     if (CGRectIsInfinite(rect)) return rect;
     
-    UIWindow *mainWindow = app.keyWindow;
+    UIWindow *mainWindow = app.yy_keyWindow;
     if (!mainWindow) mainWindow = app.windows.firstObject;
     if (!mainWindow) { // no window ?!
         if (view) {

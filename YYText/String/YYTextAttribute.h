@@ -88,59 +88,59 @@ typedef NS_ENUM (NSUInteger, YYTextTruncationType) {
 
 /// The value of this attribute is a `YYTextBackedString` object.
 /// Use this attribute to store the original plain text if it is replaced by something else (such as attachment).
-UIKIT_EXTERN NSString *const YYTextBackedStringAttributeName;
+UIKIT_EXTERN NSAttributedStringKey const YYTextBackedStringAttributeName NS_SWIFT_NAME(yyBackedString);
 
 /// The value of this attribute is a `YYTextBinding` object.
 /// Use this attribute to bind a range of text together, as if it was a single charactor.
-UIKIT_EXTERN NSString *const YYTextBindingAttributeName;
+UIKIT_EXTERN NSAttributedStringKey const YYTextBindingAttributeName NS_SWIFT_NAME(yyBinding);
 
 /// The value of this attribute is a `YYTextShadow` object.
 /// Use this attribute to add shadow to a range of text.
 /// Shadow will be drawn below text glyphs. Use YYTextShadow.subShadow to add multi-shadow.
-UIKIT_EXTERN NSString *const YYTextShadowAttributeName;
+UIKIT_EXTERN NSAttributedStringKey const YYTextShadowAttributeName NS_SWIFT_NAME(yyShadow);
 
 /// The value of this attribute is a `YYTextShadow` object.
 /// Use this attribute to add inner shadow to a range of text.
 /// Inner shadow will be drawn above text glyphs. Use YYTextShadow.subShadow to add multi-shadow.
-UIKIT_EXTERN NSString *const YYTextInnerShadowAttributeName;
+UIKIT_EXTERN NSAttributedStringKey const YYTextInnerShadowAttributeName NS_SWIFT_NAME(yyInnerShadow);
 
 /// The value of this attribute is a `YYTextDecoration` object.
 /// Use this attribute to add underline to a range of text.
 /// The underline will be drawn below text glyphs.
-UIKIT_EXTERN NSString *const YYTextUnderlineAttributeName;
+UIKIT_EXTERN NSAttributedStringKey const YYTextUnderlineAttributeName NS_SWIFT_NAME(yyUnderline);
 
 /// The value of this attribute is a `YYTextDecoration` object.
 /// Use this attribute to add strikethrough (delete line) to a range of text.
 /// The strikethrough will be drawn above text glyphs.
-UIKIT_EXTERN NSString *const YYTextStrikethroughAttributeName;
+UIKIT_EXTERN NSAttributedStringKey const YYTextStrikethroughAttributeName NS_SWIFT_NAME(yyStrikethrough);
 
 /// The value of this attribute is a `YYTextBorder` object.
 /// Use this attribute to add cover border or cover color to a range of text.
 /// The border will be drawn above the text glyphs.
-UIKIT_EXTERN NSString *const YYTextBorderAttributeName;
+UIKIT_EXTERN NSAttributedStringKey const YYTextBorderAttributeName NS_SWIFT_NAME(yyBorder);
 
 /// The value of this attribute is a `YYTextBorder` object.
 /// Use this attribute to add background border or background color to a range of text.
 /// The border will be drawn below the text glyphs.
-UIKIT_EXTERN NSString *const YYTextBackgroundBorderAttributeName;
+UIKIT_EXTERN NSAttributedStringKey const YYTextBackgroundBorderAttributeName NS_SWIFT_NAME(yyBackgroundBorder);
 
 /// The value of this attribute is a `YYTextBorder` object.
 /// Use this attribute to add a code block border to one or more line of text.
 /// The border will be drawn below the text glyphs.
-UIKIT_EXTERN NSString *const YYTextBlockBorderAttributeName;
+UIKIT_EXTERN NSAttributedStringKey const YYTextBlockBorderAttributeName NS_SWIFT_NAME(yyBlockBorder);
 
 /// The value of this attribute is a `YYTextAttachment` object.
 /// Use this attribute to add attachment to text.
 /// It should be used in conjunction with a CTRunDelegate.
-UIKIT_EXTERN NSString *const YYTextAttachmentAttributeName;
+UIKIT_EXTERN NSAttributedStringKey const YYTextAttachmentAttributeName NS_SWIFT_NAME(yyAttachment);
 
 /// The value of this attribute is a `YYTextHighlight` object.
 /// Use this attribute to add a touchable highlight state to a range of text.
-UIKIT_EXTERN NSString *const YYTextHighlightAttributeName;
+UIKIT_EXTERN NSAttributedStringKey const YYTextHighlightAttributeName NS_SWIFT_NAME(yyHighlight);
 
 /// The value of this attribute is a `NSValue` object stores CGAffineTransform.
 /// Use this attribute to add transform to each glyph in a range of text.
-UIKIT_EXTERN NSString *const YYTextGlyphTransformAttributeName;
+UIKIT_EXTERN NSAttributedStringKey const YYTextGlyphTransformAttributeName NS_SWIFT_NAME(yyGlyphTransform);
 
 
 
