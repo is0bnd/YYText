@@ -12,7 +12,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol YYTextLazyViewAttachment <NSObject>
 
-@property (strong, nonnull, readonly) UIView *view;
+/// Returns the attachment view associated with a specific rendering target.
+- (UIView *)viewForTargetView:(UIView *)targetView;
+
+/// Removes the attachment view associated with a specific rendering target.
+- (void)removeViewForTargetView:(UIView *)targetView;
+
+/// Removes all attachment views created by this provider.
+- (void)removeAllViews;
 
 @end
 

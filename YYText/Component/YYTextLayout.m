@@ -2977,7 +2977,10 @@ static void YYTextDrawAttachment(YYTextLayout *layout, CGContextRef context, CGS
         } else if ([a.content isKindOfClass:[UIView class]]) {
             view = a.content;
         } else if ([a.content conformsToProtocol:@protocol(YYTextLazyViewAttachment)]) {
-            view = [a.content view];
+            id<YYTextLazyViewAttachment> content = a.content;
+            if (targetView) {
+                view = [content viewForTargetView:targetView];
+            }
         } else if ([a.content isKindOfClass:[CALayer class]]) {
             layer = a.content;
         }
@@ -3406,8 +3409,8 @@ static void YYTextDrawDebug(YYTextLayout *layout, CGContextRef context, CGSize s
             CALayer *l = a.content;
             [l removeFromSuperlayer];
         } else if ([a.content conformsToProtocol:@protocol(YYTextLazyViewAttachment)]) {
-            UIView *v = [a.content view];
-            [v removeFromSuperview];
+            id<YYTextLazyViewAttachment> content = a.content;
+            [content removeAllViews];
         }
     }
 }

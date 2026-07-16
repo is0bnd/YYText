@@ -83,8 +83,7 @@
             if (layer.superlayer == self.layer) [layer removeFromSuperlayer];
         }
         for (id<YYTextLazyViewAttachment> content in _attachmentContents) {
-            UIView *view = [content view];
-            if (view.superview == self) [view removeFromSuperview];
+            [content removeViewForTargetView:self];
         }
         [_attachmentViews removeAllObjects];
         [_attachmentLayers removeAllObjects];

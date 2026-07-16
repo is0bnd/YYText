@@ -1103,11 +1103,8 @@ static dispatch_queue_t YYLabelGetReleaseQueue(void) {
             }
         }
         for (id<YYTextLazyViewAttachment> content in attachmentContents) {
-            UIView *view = [content view];
-            if (layoutNeedUpdate || ![layout.attachmentContentsSet containsObject:view]) {
-                if (view.superview == self) {
-                    [view removeFromSuperview];
-                }
+            if (layoutNeedUpdate || ![layout.attachmentContentsSet containsObject:content]) {
+                [content removeViewForTargetView:self];
             }
         }
         [attachmentViews removeAllObjects];
