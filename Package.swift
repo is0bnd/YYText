@@ -5,7 +5,7 @@ import PackageDescription
 let package = Package(
     name: "YYText",
     platforms: [
-        .iOS(.v13)
+        .iOS(.v15)
     ],
     products: [
         .library(
@@ -28,7 +28,7 @@ let package = Package(
                 .linkedFramework("Accelerate"),
                 .linkedFramework("CoreFoundation"),
                 .linkedFramework("CoreText"),
-                .linkedFramework("MobileCoreServices"),
+                .linkedFramework("UniformTypeIdentifiers"),
                 .linkedFramework("QuartzCore"),
                 .linkedFramework("UIKit")
             ]

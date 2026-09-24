@@ -17,66 +17,44 @@
 
 @implementation YYTextEffectWindow
 
-+ (instancetype)sharedWindow {
-    static YYTextEffectWindow *one = nil;
-    if (one == nil) {
-        // iOS 9 compatible
-        NSString *mode = [NSRunLoop currentRunLoop].currentMode;
-        if (mode.length == 27 &&
-            [mode hasPrefix:@"UI"] &&
-            [mode hasSuffix:@"InitializationRunLoopMode"]) {
-            return nil;
-        }
-    }
-    
++ (instancetype)windowForScene:(UIWindowScene *)scene {
+    if (!scene || YYTextIsAppExtension()) return nil;
+
+    static NSMapTable<UIWindowScene *, YYTextEffectWindow *> *windows;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        if (!YYTextIsAppExtension()) {
-            one = [self new];
-            one.frame = (CGRect){.size = YYTextScreenSize()};
-            one.userInteractionEnabled = NO;
-            one.windowLevel = UIWindowLevelStatusBar + 1;
-            one.hidden = NO;
-            
-            // for iOS 9:
-            one.opaque = NO;
-            one.backgroundColor = [UIColor clearColor];
-            one.layer.backgroundColor = [UIColor clearColor].CGColor;
-        }
+        windows = [NSMapTable weakToWeakObjectsMapTable];
     });
-    return one;
+
+    YYTextEffectWindow *window = [windows objectForKey:scene];
+    if (!window) {
+        window = [[self alloc] initWithWindowScene:scene];
+        window.rootViewController = [UIViewController new];
+        window.userInteractionEnabled = NO;
+        window.windowLevel = UIWindowLevelNormal + 1;
+        window.opaque = NO;
+        window.backgroundColor = UIColor.clearColor;
+        window.layer.backgroundColor = UIColor.clearColor.CGColor;
+        [windows setObject:window forKey:scene];
+    }
+    [window _syncFrame];
+    window.hidden = NO;
+    return window;
 }
 
-// stop self from becoming the KeyWindow
-- (void)becomeKeyWindow {
-    [[YYTextSharedApplication().delegate window] makeKeyWindow];
-}
-
-- (UIViewController *)rootViewController {
-    for (UIWindow *window in [YYTextSharedApplication() windows]) {
-        if (self == window) continue;
-        if (window.hidden) continue;
-        UIViewController *topViewController = window.rootViewController;
-        if (topViewController) return topViewController;
-    }
-    UIViewController *viewController = [super rootViewController];
-    if (!viewController) {
-        viewController = [UIViewController new];
-        [super setRootViewController:viewController];
-    }
-    return viewController;
+- (void)_syncFrame {
+    self.frame = self.windowScene.coordinateSpace.bounds;
 }
 
 // Bring self to front
 - (void)_updateWindowLevel {
-    UIApplication *app = YYTextSharedApplication();
-    if (!app) return;
-    
-    UIWindow *top = app.windows.lastObject;
-    UIWindow *key = app.yy_keyWindow;
-    if (key && key.windowLevel > top.windowLevel) top = key;
-    if (top == self) return;
-    self.windowLevel = top.windowLevel + 1;
+    [self _syncFrame];
+    UIWindow *top = nil;
+    for (UIWindow *window in self.windowScene.windows) {
+        if (window == self || window.hidden) continue;
+        if (!top || window.windowLevel > top.windowLevel) top = window;
+    }
+    self.windowLevel = top ? top.windowLevel + 1 : UIWindowLevelNormal + 1;
 }
 
 - (YYTextDirection)_keyboardDirection {
@@ -275,9 +253,7 @@
         CGContextRotateCTM(context, -rotation);
         CGContextTranslateCTM(context, tp.x - captureCenter.x, tp.y - captureCenter.y);
         
-        NSMutableArray *windows = app.windows.mutableCopy;
-        UIWindow *keyWindow = app.yy_keyWindow;
-        if (![windows containsObject:keyWindow]) [windows addObject:keyWindow];
+        NSMutableArray *windows = self.windowScene.windows.mutableCopy;
         [windows sortUsingComparator:^NSComparisonResult(UIWindow *w1, UIWindow *w2) {
             if (w1.windowLevel < w2.windowLevel) return NSOrderedAscending;
             else if (w1.windowLevel > w2.windowLevel) return NSOrderedDescending;

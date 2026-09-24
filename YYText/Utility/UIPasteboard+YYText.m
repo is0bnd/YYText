@@ -11,7 +11,7 @@
 
 #import "UIPasteboard+YYText.h"
 #import "NSAttributedString+YYText.h"
-#import <MobileCoreServices/MobileCoreServices.h>
+#import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
 
 
 #if __has_include("YYImage.h")
@@ -40,27 +40,27 @@ NSString *const YYTextUTTypeWEBP = @"com.google.webp";
 
 
 - (void)setYy_PNGData:(NSData *)PNGData {
-    [self setData:PNGData forPasteboardType:(id)kUTTypePNG];
+    [self setData:PNGData forPasteboardType:UTTypePNG.identifier];
 }
 
 - (NSData *)yy_PNGData {
-    return [self dataForPasteboardType:(id)kUTTypePNG];
+    return [self dataForPasteboardType:UTTypePNG.identifier];
 }
 
 - (void)setYy_JPEGData:(NSData *)JPEGData {
-    [self setData:JPEGData forPasteboardType:(id)kUTTypeJPEG];
+    [self setData:JPEGData forPasteboardType:UTTypeJPEG.identifier];
 }
 
 - (NSData *)yy_JPEGData {
-    return [self dataForPasteboardType:(id)kUTTypeJPEG];
+    return [self dataForPasteboardType:UTTypeJPEG.identifier];
 }
 
 - (void)setYy_GIFData:(NSData *)GIFData {
-    [self setData:GIFData forPasteboardType:(id)kUTTypeGIF];
+    [self setData:GIFData forPasteboardType:UTTypeGIF.identifier];
 }
 
 - (NSData *)yy_GIFData {
-    return [self dataForPasteboardType:(id)kUTTypeGIF];
+    return [self dataForPasteboardType:UTTypeGIF.identifier];
 }
 
 - (void)setYy_WEBPData:(NSData *)WEBPData {
@@ -72,11 +72,11 @@ NSString *const YYTextUTTypeWEBP = @"com.google.webp";
 }
 
 - (void)setYy_ImageData:(NSData *)imageData {
-    [self setData:imageData forPasteboardType:(id)kUTTypeImage];
+    [self setData:imageData forPasteboardType:UTTypeImage.identifier];
 }
 
 - (NSData *)yy_ImageData {
-    return [self dataForPasteboardType:(id)kUTTypeImage];
+    return [self dataForPasteboardType:UTTypeImage.identifier];
 }
 
 - (void)setYy_AttributedString:(NSAttributedString *)attributedString {
@@ -112,11 +112,11 @@ NSString *const YYTextUTTypeWEBP = @"com.google.webp";
                 if (data) {
                     switch (type.unsignedIntegerValue) {
                         case YYImageTypeGIF: {
-                            NSDictionary *item = @{(id)kUTTypeGIF : data};
+                            NSDictionary *item = @{UTTypeGIF.identifier : data};
                             [self addItems:@[item]];
                         } break;
                         case YYImageTypePNG: { // APNG
-                            NSDictionary *item = @{(id)kUTTypePNG : data};
+                            NSDictionary *item = @{UTTypePNG.identifier : data};
                             [self addItems:@[item]];
                         } break;
                         case YYImageTypeWebP: {

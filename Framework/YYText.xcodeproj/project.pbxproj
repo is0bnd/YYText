@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		22B1D54B2F7A74AD00BDF85A /* YYTextLazyViewAttachment.h in Headers */ = {isa = PBXBuildFile; fileRef = 22B1D54A2F7A74AD00BDF85A /* YYTextLazyViewAttachment.h */; };
-		D995E6BA1F372EC800EBEE44 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D918BFE71F372EA000106E14 /* MobileCoreServices.framework */; };
+		D995E6BA1F372EC800EBEE44 /* UniformTypeIdentifiers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D918BFE71F372EA000106E14 /* UniformTypeIdentifiers.framework */; };
 		D995E6BB1F372EC800EBEE44 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D918BFE61F372E9B00106E14 /* Accelerate.framework */; };
 		D995E6BC1F372EC800EBEE44 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D918BFE51F372E9800106E14 /* CoreText.framework */; };
 		D995E6BD1F372EC800EBEE44 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D918BFE41F372E7A00106E14 /* QuartzCore.framework */; };
@@ -74,7 +74,7 @@
 		D918BFE41F372E7A00106E14 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		D918BFE51F372E9800106E14 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		D918BFE61F372E9B00106E14 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
-		D918BFE71F372EA000106E14 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		D918BFE71F372EA000106E14 /* UniformTypeIdentifiers.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UniformTypeIdentifiers.framework; path = System/Library/Frameworks/UniformTypeIdentifiers.framework; sourceTree = SDKROOT; };
 		D995E6C21F372ED100EBEE44 /* YYTextContainerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YYTextContainerView.h; sourceTree = "<group>"; };
 		D995E6C31F372ED100EBEE44 /* YYTextContainerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YYTextContainerView.m; sourceTree = "<group>"; };
 		D995E6C41F372ED100EBEE44 /* YYTextDebugOption.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YYTextDebugOption.h; sourceTree = "<group>"; };
@@ -131,7 +131,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D995E6BA1F372EC800EBEE44 /* MobileCoreServices.framework in Frameworks */,
+				D995E6BA1F372EC800EBEE44 /* UniformTypeIdentifiers.framework in Frameworks */,
 				D995E6BB1F372EC800EBEE44 /* Accelerate.framework in Frameworks */,
 				D995E6BC1F372EC800EBEE44 /* CoreText.framework in Frameworks */,
 				D995E6BD1F372EC800EBEE44 /* QuartzCore.framework in Frameworks */,
@@ -164,7 +164,7 @@
 			isa = PBXGroup;
 			children = (
 				D918BFDA1F372E3000106E14 /* Info.plist */,
-				D918BFE71F372EA000106E14 /* MobileCoreServices.framework */,
+				D918BFE71F372EA000106E14 /* UniformTypeIdentifiers.framework */,
 				D918BFE61F372E9B00106E14 /* Accelerate.framework */,
 				D918BFE51F372E9800106E14 /* CoreText.framework */,
 				D918BFE41F372E7A00106E14 /* QuartzCore.framework */,
@@ -436,7 +436,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -486,7 +486,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
@@ -506,7 +506,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.ibireme.YYText;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
@@ -526,7 +526,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.ibireme.YYText;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";

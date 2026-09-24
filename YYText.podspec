@@ -6,14 +6,14 @@ Pod::Spec.new do |s|
   s.authors      = { 'ibireme' => 'ibireme@gmail.com' }
   s.social_media_url = 'http://blog.ibireme.com'
   s.homepage     = 'https://github.com/ibireme/YYText'
-  s.platform     = :ios, '13.0'
-  s.ios.deployment_target = '13.0'
+  s.platform     = :ios, '15.0'
+  s.ios.deployment_target = '15.0'
   s.source       = { :git => 'https://github.com/ibireme/YYText.git', :tag => s.version.to_s }
   
   s.requires_arc = true
   s.source_files = 'YYText/**/*.{h,m}'
   s.public_header_files = 'YYText/**/*.{h}'
   
-  s.frameworks = 'UIKit', 'CoreFoundation','CoreText', 'QuartzCore', 'Accelerate', 'MobileCoreServices'
+  s.frameworks = 'UIKit', 'CoreFoundation','CoreText', 'QuartzCore', 'Accelerate', 'UniformTypeIdentifiers'
 
 end

@@ -356,10 +356,10 @@ typedef NS_ENUM(NSUInteger, YYImageBlendOperation) {
 /// Detect a data's image type by reading the data's header 16 bytes (very fast).
 CG_EXTERN YYImageType YYImageDetectType(CFDataRef data);
 
-/// Convert YYImageType to UTI (such as kUTTypeJPEG).
+/// Convert YYImageType to a UTI (such as public.jpeg).
 CG_EXTERN CFStringRef _Nullable YYImageTypeToUTType(YYImageType type);
 
-/// Convert UTI (such as kUTTypeJPEG) to YYImageType.
+/// Convert a UTI (such as public.jpeg) to YYImageType.
 CG_EXTERN YYImageType YYImageTypeFromUTType(CFStringRef uti);
 
 /// Get image type's file extension (such as @"jpg").
